@@ -27,17 +27,8 @@ def register():
         "nick": input("Nick: ")
     }
     try:
-        response = mq.addUser(user)
-        print("Usuario creado:", response["nick"])
-    except Exception as e:
-        print("Error:", e)
-
-def list_users():
-    print("\n--- Lista de usuarios ---")
-    try:
-        users = model.listUsers(token)
-        for u in users:
-            print(f"{u['nick']} - {u['email']}")
+        mq.addUser(user)
+        print("Usuario enviado al servidor MQ.")
     except Exception as e:
         print("Error:", e)
 
@@ -51,8 +42,8 @@ def update_user():
         "nick": input("Nuevo nick: ")
     }
     try:
-        res = model.updateUser(token, user_id, user)
-        print("Usuario actualizado:", res)
+        mq.updateUser(token, user)
+        print("Actualización enviada al servidor MQ.")
     except Exception as e:
         print("Error:", e)
 
@@ -62,102 +53,56 @@ def remove_user():
     if confirm.lower() != "s":
         return
     try:
-        res = model.removeUser(token, user_id)
-        print("Usuario eliminado:", res)
+        mq.removeUser(token, user_id)
+        print("Eliminación enviada al servidor MQ.")
     except Exception as e:
         print("Error:", e)
 
 def follow_user():
-    nick = input("Nick del usuario a seguir: ")
+    followed = input("ID del usuario a seguir: ")
     try:
-        res = mq.follow(token, user_id, nick)
-        print("Siguiendo:", res)
+        mq.follow(token, followed)
+        print("Petición de seguir enviada.")
     except Exception as e:
         print("Error:", e)
 
 def unfollow_user():
-    nick = input("Nick del usuario a dejar de seguir: ")
+    followed = input("ID del usuario a dejar de seguir: ")
     try:
-        res = mq.unfollow(token, user_id, nick)
-        print("Dejaste de seguir:", res)
-    except Exception as e:
-        print("Error:", e)
-
-def list_following():
-    print("\n--- Siguiendo ---")
-    try:
-        users = model.listFollowing(token, user_id)
-        for u in users:
-            print(u["nick"])
-    except Exception as e:
-        print("Error:", e)
-
-def list_followers():
-    print("\n--- Seguidores ---")
-    try:
-        users = model.listFollowers(token, user_id)
-        for u in users:
-            print(u["nick"])
+        mq.unfollow(token, followed)
+        print("Petición de dejar de seguir enviada.")
     except Exception as e:
         print("Error:", e)
 
 def post_tweet():
     content = input("Contenido tweet: ")
     try:
-        t = model.addTweet(token, content)
-        print("Tweet publicado:", t["id"])
+        mq.addTweet(token, content)
+        print("Tweet enviado.")
     except Exception as e:
         print("Error:", e)
 
 def retweet():
     tweet_id = input("ID tweet a retuitear: ")
     try:
-        rt = model.retweet(token, tweet_id)
-        print("Retweet publicado:", rt.get("id"))
-    except Exception as e:
-        print("Error:", e)
-
-def list_tweets():
-    print("\n--- Tweets ---")
-    try:
-        tweets = model.listTweets(token)
-        for t in tweets:
-            ref = f"(retweet de {t['ref_id']})" if t.get("ref_id") else ""
-            print(f"[{t['nick']}] {t['content']} {ref} (ID: {t['id']})")
+        mq.addRetweet(token, tweet_id)
+        print("Retweet enviado.")
     except Exception as e:
         print("Error:", e)
 
 def like_tweet():
     tweet_id = input("ID del tweet a likear: ")
     try:
-        res = model.like(token, tweet_id)
-        print("Like:", res)
+        mq.like(token, tweet_id)
+        print("Like enviado.")
     except Exception as e:
         print("Error:", e)
 
 def dislike_tweet():
     tweet_id = input("ID del tweet a dislikear: ")
     try:
-        res = model.dislike(token, tweet_id)
-        print("Dislike:", res)
-    except Exception as e:
-        print("Error:", e)
-
-def list_likes():
-    tweet_id = input("ID del tweet para ver likes: ")
-    try:
-        users = model.listLikes(token, tweet_id)
-        for u in users:
-            print(u["nick"])
-    except Exception as e:
-        print("Error:", e)
-
-def list_dislikes():
-    tweet_id = input("ID del tweet para ver dislikes: ")
-    try:
-        users = model.listDislikes(token, tweet_id)
-        for u in users:
-            print(u["nick"])
+        mq.dislike(token, tweet_id)
+        print("Dislike enviado.")
     except Exception as e:
         print("Error:", e)
 
@@ -166,20 +111,14 @@ def show_menu():
 ==== Twitter Lite CLI ====
 1. adduser
 2. login
-3. listusers
-4. updateuser
-5. removeuser
-6. follow
-7. unfollow
-8. listfollowing
-9. listfollowers
-10. addtweet
-11. addRetweet
-12. listtweets
-13. like
-14. dislike
-15. listlikes
-16. listdislikes
+3. updateuser
+4. removeuser
+5. follow
+6. unfollow
+7. addtweet
+8. addRetweet
+9. like
+10. dislike
 0. exit
 """)
 
@@ -188,14 +127,9 @@ def main():
         show_menu()
         choice = input("Opción: ").strip()
         ops = {
-            "1": register, "2": login, "3": list_users,
-            "4": update_user, "5": remove_user,
-            "6": follow_user, "7": unfollow_user,
-            "8": list_following, "9": list_followers,
-            "10": post_tweet, "11": retweet,
-            "12": list_tweets, "13": like_tweet,
-            "14": dislike_tweet, "15": list_likes,
-            "16": list_dislikes
+            "1": register, "2": login, "3": update_user,
+            "4": remove_user, "5": follow_user, "6": unfollow_user,
+            "7": post_tweet, "8": retweet, "9": like_tweet, "10": dislike_tweet
         }
         if choice == "0":
             print("Hasta luego.")
