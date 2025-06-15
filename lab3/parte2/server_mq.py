@@ -1,4 +1,3 @@
-# server_mq.py
 import pika
 import json
 import model_mongo as model
@@ -24,15 +23,15 @@ def callback(ch, method, properties, body):
 
         elif msg['type'] == 'removeUser':
             print('remove user')
-            model.remove_user(msg['token'])
+            model.remove_user(msg['token'])  # user_id not needed, handled by token
 
         elif msg['type'] == 'follow':
             print('follow user')
-            model.follow(msg['token'], msg['data'])
+            model.follow(msg['token'], msg['followed_id'])
 
         elif msg['type'] == 'unfollow':
             print('unfollow user')
-            model.unfollow(msg['token'], msg['data'])
+            model.unfollow(msg['token'], msg['followed_id'])
 
         elif msg['type'] == 'addTweet':
             print('add tweet')
@@ -44,11 +43,11 @@ def callback(ch, method, properties, body):
 
         elif msg['type'] == 'like':
             print('like tweet')
-            model.like(msg['token'], msg['data'])
+            model.like(msg['token'], msg['tweet_id'])
 
         elif msg['type'] == 'dislike':
             print('dislike tweet')
-            model.dislike(msg['token'], msg['data'])
+            model.dislike(msg['token'], msg['tweet_id'])
 
         else:
             print(f"Unknown message type: {msg['type']}")
