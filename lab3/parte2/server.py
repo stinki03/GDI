@@ -14,7 +14,7 @@ def login():
         return {'error': str(exc)}, 401
 
 @app.route('/twitter/users', methods=['GET'])
-def listUsers():
+def list_users():
     token = request.args.get('token')
     query = request.args.get('filter', '')
     try:

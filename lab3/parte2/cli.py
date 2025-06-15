@@ -106,7 +106,7 @@ def dislike_tweet():
     except Exception as e:
         print("Error:", e)
 
-def list_users():
+def listUsers():
     try:
         print("\n--- Lista de usuarios ---")
         users = model.listUsers(token)
@@ -115,7 +115,7 @@ def list_users():
     except Exception as e:
         print("Error:", e)
 
-def list_following():
+def listFollowing():
     try:
         print("\n--- Siguiendo ---")
         users = model.listFollowing(token, user_id)
@@ -124,7 +124,7 @@ def list_following():
     except Exception as e:
         print("Error:", e)
 
-def list_followers():
+def listFollowers():
     try:
         print("\n--- Seguidores ---")
         users = model.listFollowers(token, user_id)
@@ -191,8 +191,8 @@ def main():
             "1": register, "2": login, "3": update_user,
             "4": remove_user, "5": follow_user, "6": unfollow_user,
             "7": post_tweet, "8": retweet, "9": like_tweet,
-            "10": dislike_tweet, "11": list_users, "12": list_following,
-            "13": list_followers, "14": list_tweets,
+            "10": dislike_tweet, "11": listUsers, "12": listFollowing,
+            "13": listFollowers, "14": list_tweets,
             "15": list_likes, "16": list_dislikes
         }
         if choice == "0":

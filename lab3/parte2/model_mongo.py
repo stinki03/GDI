@@ -37,7 +37,7 @@ def login(email, password):
     return str(user['_id'])
 
 @require_login
-def list_users(current_user, query="", limit=20, skip=0):
+def listUsers(current_user, query="", limit=20, skip=0):
     db = get_db()
     filt = {}
     if query:
@@ -96,7 +96,7 @@ def unfollow(current_user, nick):
     return True
 
 @require_login
-def list_following(current_user, query="", limit=20, skip=0):
+def listFollowing(current_user, query="", limit=20, skip=0):
     db = get_db()
     ids = current_user.get('following', [])
     filt = {'_id': {'$in': ids}}
@@ -107,7 +107,7 @@ def list_following(current_user, query="", limit=20, skip=0):
     return [{k: str(v) for k,v in u.items() if k!='_id'} for u in cursor]
 
 @require_login
-def list_followers(current_user, query="", limit=20, skip=0):
+def listFollowers(current_user, query="", limit=20, skip=0):
     db = get_db()
     ids = current_user.get('followers', [])
     filt = {'_id': {'$in': ids}}
@@ -151,7 +151,7 @@ def add_retweet(current_user, tweet_id):
     return {'id': str(res.inserted_id), 'ref_id': tweet_id}
 
 @require_login
-def list_tweets(current_user, query="", limit=20, skip=0):
+def listTweets(current_user, query="", limit=20, skip=0):
     db = get_db()
     feed_ids = current_user.get('following', []) + [current_user['_id']]
     filt = {'user_id': {'$in': feed_ids}}
@@ -193,7 +193,7 @@ def dislike(current_user, tweet_id):
     return True
 
 @require_login
-def list_likes(current_user, tweet_id):
+def listLikes(current_user, tweet_id):
     db = get_db()
     t = db.tweets.find_one({'_id': ObjectId(tweet_id)})
     ids = t.get('likes', [])
@@ -201,7 +201,7 @@ def list_likes(current_user, tweet_id):
     return [{k: str(v) for k,v in u.items() if k!='_id'} for u in users]
 
 @require_login
-def list_dislikes(current_user, tweet_id):
+def listDislikes(current_user, tweet_id):
     db = get_db()
     t = db.tweets.find_one({'_id': ObjectId(tweet_id)})
     ids = t.get('dislikes', [])
