@@ -106,6 +106,61 @@ def dislike_tweet():
     except Exception as e:
         print("Error:", e)
 
+def list_users():
+    try:
+        print("\n--- Lista de usuarios ---")
+        users = model.listUsers(token)
+        for u in users:
+            print(f"{u['nick']} - {u['email']}")
+    except Exception as e:
+        print("Error:", e)
+
+def list_following():
+    try:
+        print("\n--- Siguiendo ---")
+        users = model.listFollowing(token, user_id)
+        for u in users:
+            print(u["nick"])
+    except Exception as e:
+        print("Error:", e)
+
+def list_followers():
+    try:
+        print("\n--- Seguidores ---")
+        users = model.listFollowers(token, user_id)
+        for u in users:
+            print(u["nick"])
+    except Exception as e:
+        print("Error:", e)
+
+def list_tweets():
+    try:
+        print("\n--- Tweets ---")
+        tweets = model.listTweets(token)
+        for t in tweets:
+            ref = f"(retweet de {t['ref_id']})" if t.get("ref_id") else ""
+            print(f"[{t['nick']}] {t['content']} {ref} (ID: {t['id']})")
+    except Exception as e:
+        print("Error:", e)
+
+def list_likes():
+    tweet_id = input("ID del tweet para ver likes: ")
+    try:
+        users = model.listLikes(token, tweet_id)
+        for u in users:
+            print(u["nick"])
+    except Exception as e:
+        print("Error:", e)
+
+def list_dislikes():
+    tweet_id = input("ID del tweet para ver dislikes: ")
+    try:
+        users = model.listDislikes(token, tweet_id)
+        for u in users:
+            print(u["nick"])
+    except Exception as e:
+        print("Error:", e)
+
 def show_menu():
     print("""
 ==== Twitter Lite CLI ====
@@ -119,6 +174,12 @@ def show_menu():
 8. addRetweet
 9. like
 10. dislike
+11. listusers
+12. listfollowing
+13. listfollowers
+14. listtweets
+15. listlikes
+16. listdislikes
 0. exit
 """)
 
@@ -129,7 +190,10 @@ def main():
         ops = {
             "1": register, "2": login, "3": update_user,
             "4": remove_user, "5": follow_user, "6": unfollow_user,
-            "7": post_tweet, "8": retweet, "9": like_tweet, "10": dislike_tweet
+            "7": post_tweet, "8": retweet, "9": like_tweet,
+            "10": dislike_tweet, "11": list_users, "12": list_following,
+            "13": list_followers, "14": list_tweets,
+            "15": list_likes, "16": list_dislikes
         }
         if choice == "0":
             print("Hasta luego.")
